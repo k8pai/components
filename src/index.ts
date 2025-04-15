@@ -1,1 +1,1 @@
-export { filterObject } from './utils/index';
+export * from './utils';
