@@ -2,7 +2,6 @@
 	"name": "components",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
 		"build": "tsup src/index.ts --format cjs,esm --dts",
 		"release": "pnpm run build && changeset publish",
@@ -19,6 +18,18 @@
 		"prettier": "^3.5.3",
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.3"
+	},
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		}
 	},
 	"dependencies": {
 		"@changesets/cli": "^2.29.0"
