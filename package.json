@@ -1,0 +1,26 @@
+{
+	"name": "components",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsup index.ts --format cjs,esm --dts",
+		"release": "pnpm run build && changeset publish",
+		"lint": "tsc",
+		"dev": "tsup --watch",
+		"prepublishOnly": "npm run build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"devDependencies": {
+		"eslint": "^9.24.0",
+		"prettier": "^3.5.3",
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@changesets/cli": "^2.29.0"
+	}
+}
