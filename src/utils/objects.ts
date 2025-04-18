@@ -59,6 +59,12 @@ export const difference = <T extends Record<string, any>>(
 	return diff;
 };
 
+export const deepClone = <T>(obj: T): T => {
+	return JSON.parse(JSON.stringify(obj));
+};
+
 export default {
 	filterObject,
+	difference,
+	deepClone,
 };
