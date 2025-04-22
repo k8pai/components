@@ -40,9 +40,20 @@ export const uniqueBy = <T, K>(arr: T[], keyFn: (item: T) => K): T[] => {
 	});
 };
 
+export const partition = <T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]] => {
+	return arr.reduce<[T[], T[]]>(
+		(acc, item) => {
+			(predicate(item) ? acc[0] : acc[1]).push(item);
+			return acc;
+		},
+		[[], []]
+	);
+};
+
 export default {
 	multiSort,
 	groupBy,
 	filterWithQuery,
 	uniqueBy,
+	partition,
 };
