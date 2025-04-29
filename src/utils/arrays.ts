@@ -1,3 +1,5 @@
+import { fuzzySubsequenceMatch } from './strings';
+
 type SortKey<T> = {
 	key: keyof T;
 	desc?: boolean;
@@ -50,10 +52,14 @@ export const partition = <T>(arr: T[], predicate: (item: T) => boolean): [T[], T
 	);
 };
 
+export const fuzzyFilter = <T>(list: T[], query: string, toStringFn: (item: T) => string = (item) => String(item)): T[] =>
+	!query ? list : list.filter((item) => fuzzySubsequenceMatch(toStringFn(item), query));
+
 export default {
 	multiSort,
 	groupBy,
 	filterWithQuery,
 	uniqueBy,
 	partition,
+	fuzzyFilter,
 };
