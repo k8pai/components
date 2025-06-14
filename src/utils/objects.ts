@@ -63,8 +63,47 @@ export const deepClone = <T>(obj: T): T => {
 	return JSON.parse(JSON.stringify(obj));
 };
 
+export type casedObjectConfigurationType = {
+	case?: 'snake' | 'camel' | 'upper' | 'lower'; // The type of casing to apply
+	delimiter?: string; // The delimiter to use for separating words in the keys
+};
+
+export type casedObjectType<T> = casedObjectConfigurationType & {
+	obj?: Record<string, any>; // The data object to be transformed
+};
+
+export const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter = '_' }: casedObjectType<T>) => {
+	// const result = {};
+	const valid_cases = ['snake', 'camel', 'upper', 'lower'];
+	if (!valid_cases.includes(casting_case)) {
+		throw new Error(`Invalid casting type: ${casting_case}. Valid types are ${valid_cases.join(', ')}.`);
+	}
+
+	for (let key in obj) {
+		if (Object.hasOwn(obj, key)) {
+			let newKey = String(key).replaceAll(' ', delimiter);
+			if (casting_case === 'snake' || casting_case === 'lower') {
+				newKey = newKey.toLowerCase();
+			} else if (casting_case === 'upper') {
+				newKey = newKey.toUpperCase();
+			} else if (casting_case === 'camel') {
+				newKey = newKey
+					.split(delimiter)
+					.map((word, index) => (index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()))
+					.join('');
+			}
+			obj[newKey] = obj[key];
+			if (newKey !== key) {
+				delete obj[key];
+			}
+		}
+	}
+	return obj;
+};
+
 export default {
 	filterObject,
 	difference,
 	deepClone,
+	caseObjectKeys,
 };
