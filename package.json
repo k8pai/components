@@ -3,19 +3,22 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"build": "tsup src/index.ts --format cjs,esm --dts",
-		"release": "pnpm run build && changeset publish",
+		"build": "tsup --config tsup.config.ts",
+		"dev": "tsup --config tsup.dev.config.ts --watch",
+		"test": "nodemon",
+		"release": "npm run build && changeset publish",
 		"lint": "tsc",
-		"dev": "tsup --watch",
 		"prepublishOnly": "npm run build"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"type": "commonjs",
+	"type": "module",
 	"devDependencies": {
+		"@types/node": "^24.0.1",
 		"@types/react": "^19.1.2",
 		"eslint": "^9.24.0",
+		"nodemon": "^3.1.10",
 		"prettier": "^3.5.3",
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.3"
