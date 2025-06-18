@@ -1,6 +1,6 @@
 export type FilterObjectPredicate<T> = (key: keyof T, value: T[keyof T]) => boolean;
 
-export const filterObject = <T extends Object>(obj: T, predicate: FilterObjectPredicate<T>) => {
+const filterObject = <T extends Object>(obj: T, predicate: FilterObjectPredicate<T>) => {
 	return Object.fromEntries(Object.entries(obj).filter(([key, value]) => predicate(key as keyof T, value))) as Partial<T>;
 };
 
@@ -11,7 +11,7 @@ export type differenceOptions<T> = {
 	ignoreUndefined?: boolean;
 };
 
-export const difference = <T extends Record<string, any>>(
+const difference = <T extends Record<string, any>>(
 	a: Partial<T>,
 	b: Partial<T>,
 	options: differenceOptions<T> = { preferFrom: 'RIGHT' }
@@ -59,7 +59,7 @@ export const difference = <T extends Record<string, any>>(
 	return diff;
 };
 
-export const deepClone = <T>(obj: T): T => {
+const deepClone = <T>(obj: T): T => {
 	return JSON.parse(JSON.stringify(obj));
 };
 
@@ -72,7 +72,7 @@ export type casedObjectType<T> = casedObjectConfigurationType & {
 	obj?: Record<string, any>; // The data object to be transformed
 };
 
-export const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter = '_' }: casedObjectType<T>) => {
+const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter = '_' }: casedObjectType<T>) => {
 	// const result = {};
 	const valid_cases = ['snake', 'camel', 'upper', 'lower'];
 	if (!valid_cases.includes(casting_case)) {
@@ -101,9 +101,4 @@ export const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', deli
 	return obj;
 };
 
-export default {
-	filterObject,
-	difference,
-	deepClone,
-	caseObjectKeys,
-};
+export { caseObjectKeys, deepClone, difference, filterObject };

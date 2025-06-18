@@ -5,7 +5,7 @@ type SortKey<T> = {
 	desc?: boolean;
 };
 
-export const multiSort = <T>(arr: T[], keys: SortKey<T>[]): T[] => {
+const multiSort = <T>(arr: T[], keys: SortKey<T>[]): T[] => {
 	return [...arr].sort((a, b) => {
 		for (const { key, desc = false } of keys) {
 			const dir = desc ? -1 : 1;
@@ -16,7 +16,7 @@ export const multiSort = <T>(arr: T[], keys: SortKey<T>[]): T[] => {
 	});
 };
 
-export const groupBy = <T>(array: T[], key: keyof T | ((item: T) => string | number)): Record<string | number, T[]> => {
+const groupBy = <T>(array: T[], key: keyof T | ((item: T) => string | number)): Record<string | number, T[]> => {
 	return array.reduce(
 		(acc, item) => {
 			const groupKey = typeof key === 'function' ? key(item) : (item[key] as string | number);
@@ -27,12 +27,12 @@ export const groupBy = <T>(array: T[], key: keyof T | ((item: T) => string | num
 	);
 };
 
-export const filterWithQuery = <T>(arr: T[], query: string, keys: (keyof T)[]): T[] => {
+const filterWithQuery = <T>(arr: T[], query: string, keys: (keyof T)[]): T[] => {
 	const lower = query.toLowerCase();
 	return arr.filter((item) => keys.some((key) => typeof item[key] === 'string' && (item[key] as string).toLowerCase().includes(lower)));
 };
 
-export const uniqueBy = <T, K>(arr: T[], keyFn: (item: T) => K): T[] => {
+const uniqueBy = <T, K>(arr: T[], keyFn: (item: T) => K): T[] => {
 	const seen = new Set<K>();
 	return arr.filter((item) => {
 		const key = keyFn(item);
@@ -42,7 +42,7 @@ export const uniqueBy = <T, K>(arr: T[], keyFn: (item: T) => K): T[] => {
 	});
 };
 
-export const partition = <T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]] => {
+const partition = <T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]] => {
 	return arr.reduce<[T[], T[]]>(
 		(acc, item) => {
 			(predicate(item) ? acc[0] : acc[1]).push(item);
@@ -52,14 +52,7 @@ export const partition = <T>(arr: T[], predicate: (item: T) => boolean): [T[], T
 	);
 };
 
-export const fuzzyFilter = <T>(list: T[], query: string, toStringFn: (item: T) => string = (item) => String(item)): T[] =>
+const fuzzyFilter = <T>(list: T[], query: string, toStringFn: (item: T) => string = (item) => String(item)): T[] =>
 	!query ? list : list.filter((item) => fuzzySubsequenceMatch(toStringFn(item), query));
 
-export default {
-	multiSort,
-	groupBy,
-	filterWithQuery,
-	uniqueBy,
-	partition,
-	fuzzyFilter,
-};
+export { filterWithQuery, fuzzyFilter, groupBy, multiSort, partition, uniqueBy };
