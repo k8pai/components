@@ -1,7 +1,10 @@
 {
 	"name": "@k8pai/components",
-	"version": "1.0.0",
+	"version": "1.0.6",
 	"description": "",
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsup --config tsup.config.ts",
 		"dev": "tsup --config tsup.dev.config.ts --watch",
@@ -24,14 +27,14 @@
 		"typescript": "^5.8.3"
 	},
 	"main": "dist/index.js",
-	"module": "dist/index.mjs",
+	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
 		"dist"
 	],
 	"exports": {
 		".": {
-			"import": "./dist/index.mjs",
+			"import": "./dist/index.js",
 			"require": "./dist/index.js"
 		}
 	},
