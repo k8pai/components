@@ -1,12 +1,12 @@
-interface CsvToJsonOptions {
+export interface CsvToJsonOptions {
 	csv: string;
 	delimiter?: string;
 }
 
-type JsonObject = { [key: string]: string };
+export type JsonObject = { [key: string]: string };
 
 // Custom CSV-to-JSON converter function
-const csvToJson = ({ csv, delimiter = ',' }: CsvToJsonOptions): JsonObject[] => {
+export const csvToJson = ({ csv, delimiter = ',' }: CsvToJsonOptions): JsonObject[] => {
 	const rows: string[][] = [];
 	let inQuotes: boolean = false;
 	let field: string = '';
@@ -59,5 +59,3 @@ const csvToJson = ({ csv, delimiter = ',' }: CsvToJsonOptions): JsonObject[] => 
 			}, {})
 	);
 };
-
-export { csvToJson };

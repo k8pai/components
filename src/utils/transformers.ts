@@ -1,12 +1,12 @@
 import { casedObjectConfigurationType, caseObjectKeys } from './objects';
 
-function validateOptions(options: any) {
+export function validateOptions(options: any) {
 	const { type, value } = options;
 	if (typeof type === 'undefined') throw new Error('type is required');
 	if (typeof value === 'undefined') throw new Error('value is required');
 }
 
-function getOrCreateNestedArrayItem(current: any, arrayKey: string, obj: any, rowIndex: number) {
+export function getOrCreateNestedArrayItem(current: any, arrayKey: string, obj: any, rowIndex: number) {
 	if (!(arrayKey in current)) current[arrayKey] = [];
 
 	if (obj.meta?.rowIndex === rowIndex) {
@@ -18,7 +18,7 @@ function getOrCreateNestedArrayItem(current: any, arrayKey: string, obj: any, ro
 	return newItem;
 }
 
-const formKeysWithObjectSchema = ({ key_name, obj = {}, options = { rowIndex: 0 } }: formKeysWithObjectSchemaType) => {
+export const formKeysWithObjectSchema = ({ key_name, obj = {}, options = { rowIndex: 0 } }: formKeysWithObjectSchemaType) => {
 	try {
 		validateOptions(options);
 		const keys = key_name.split('.');
@@ -72,13 +72,13 @@ export interface MetaObjectType extends Record<string, any> {
 	[key: string]: any; // Allow any other properties
 }
 
-const formMetaObject = (meta: MetaObjectType): { meta: MetaObjectType } => {
+export const formMetaObject = (meta: MetaObjectType): { meta: MetaObjectType } => {
 	return {
 		meta,
 	};
 };
 
-const destroyMetaObject = (obj: MetaObjectType) => {
+export const destroyMetaObject = (obj: MetaObjectType) => {
 	if (typeof obj !== 'object' || obj === null) {
 		return obj; // Return non-object values as is
 	}
@@ -90,7 +90,7 @@ const meta = {
 	rowIndex: 0,
 };
 
-const formComplexStructure = ({ json, structure = {}, filters = {}, casingOptions = {} }: FormComplexStructureType) => {
+export const formComplexStructure = ({ json, structure = {}, filters = {}, casingOptions = {} }: FormComplexStructureType) => {
 	let returnArray = [];
 	const excludeValues: Record<string, string | Array<string>> = {};
 	const { excludeIfValue = {}, returnType = 'array' } = filters;
@@ -137,5 +137,3 @@ const formComplexStructure = ({ json, structure = {}, filters = {}, casingOption
 	}
 	return returnArray;
 };
-
-export { formComplexStructure, formKeysWithObjectSchema, getOrCreateNestedArrayItem, validateOptions };

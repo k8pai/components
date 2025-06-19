@@ -66,21 +66,24 @@ const deepClone = <T>(obj: T): T => {
 export type casedObjectConfigurationType = {
 	case?: 'snake' | 'camel' | 'upper' | 'lower'; // The type of casing to apply
 	delimiter?: string; // The delimiter to use for separating words in the keys
+	mutate?: boolean; // Whether to mutate the original object or return a new one
 };
 
 export type casedObjectType<T> = casedObjectConfigurationType & {
 	obj?: Record<string, any>; // The data object to be transformed
 };
 
-const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter = '_' }: casedObjectType<T>) => {
+const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter = '_', mutate = false }: casedObjectType<T>) => {
 	// const result = {};
 	const valid_cases = ['snake', 'camel', 'upper', 'lower'];
 	if (!valid_cases.includes(casting_case)) {
 		throw new Error(`Invalid casting type: ${casting_case}. Valid types are ${valid_cases.join(', ')}.`);
 	}
 
-	for (let key in obj) {
-		if (Object.hasOwn(obj, key)) {
+	let result = !mutate ? deepClone(obj) : obj;
+
+	for (let key in result) {
+		if (Object.hasOwn(result, key)) {
 			let newKey = String(key).replaceAll(' ', delimiter);
 			if (casting_case === 'snake' || casting_case === 'lower') {
 				newKey = newKey.toLowerCase();
@@ -92,13 +95,13 @@ const caseObjectKeys = <T>({ obj = {}, case: casting_case = 'snake', delimiter =
 					.map((word, index) => (index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()))
 					.join('');
 			}
-			obj[newKey] = obj[key];
+			result[newKey] = result[key];
 			if (newKey !== key) {
-				delete obj[key];
+				delete result[key];
 			}
 		}
 	}
-	return obj;
+	return result;
 };
 
 export { caseObjectKeys, deepClone, difference, filterObject };

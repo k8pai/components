@@ -9,6 +9,14 @@ export const fuzzySubsequenceMatch = (text: string, query: string): boolean => {
 	return false;
 };
 
-export default {
-	fuzzySubsequenceMatch,
+export const toSnakeCase = (str: string, delimiter: string = '_'): string => {
+	return String(str).replaceAll(' ', delimiter).toLowerCase();
+};
+
+export const toCamelCase = (str: string, delimiter: string = '_'): string => {
+	let newKey = String(str).replaceAll(' ', delimiter);
+	return newKey
+		.split(delimiter)
+		.map((word, index) => (index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()))
+		.join('');
 };
