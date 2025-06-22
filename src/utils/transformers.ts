@@ -62,6 +62,7 @@ export interface FormComplexStructureType {
 	filters?: {
 		excludeIfEmpty?: Record<string, boolean>; // Fields to exclude if empty
 		excludeIfValue?: Record<string, string | Array<string>>; // Fields to exclude if they match a specific value
+		excludeColumnIfValue?: Record<string, string | Array<string>>; // Fields to exclude if they match a specific value
 		returnType?: 'object' | 'array'; // The return type of the function, either 'object' or 'array'
 	};
 	casingOptions?: casedObjectConfigurationType; // Options for formatting keys
@@ -93,12 +94,21 @@ const meta = {
 export const formComplexStructure = ({ json, structure = {}, filters = {}, casingOptions = {} }: FormComplexStructureType) => {
 	let returnArray = [];
 	const excludeValues: Record<string, string | Array<string>> = {};
-	const { excludeIfValue = {}, returnType = 'array' } = filters;
+	const excludeColumnValues: Record<string, string | Array<string>> = {};
+	const { excludeIfValue = {}, excludeColumnIfValue = {}, returnType = 'array' } = filters;
+	if (typeof excludeColumnIfValue !== 'object') throw new Error('excludeColumnIfValue must be an object');
+	if (typeof excludeIfValue !== 'object') throw new Error('excludeColumnIfValue must be an object');
+
+	for (let [excludeColumnKey, excludeColumnValue] of Object.entries(excludeColumnIfValue)) {
+		if (Array.isArray(excludeColumnValue)) {
+			for (let value of excludeColumnValue) {
+				excludeColumnValues[value] = excludeColumnKey;
+			}
+		}
+	}
 
 	for (let [excludeKey, excludeValue] of Object.entries(excludeIfValue)) {
-		if (typeof excludeValue === 'string') {
-			excludeValues[excludeValue] = excludeKey;
-		} else if (Array.isArray(excludeValue)) {
+		if (Array.isArray(excludeValue)) {
 			for (let value of excludeValue) {
 				excludeValues[value] = excludeKey;
 			}
@@ -118,8 +128,13 @@ export const formComplexStructure = ({ json, structure = {}, filters = {}, casin
 
 		for (let [key, value] of Object.entries(structure)) {
 			const fieldValue = data[value] ?? '';
-			if (excludeValues[fieldValue] === key) {
+
+			if (excludeIfValue[value] === fieldValue || excludeValues[fieldValue] === value) {
 				excludeRow = true;
+				continue;
+			}
+
+			if (excludeColumnIfValue[value] === fieldValue || excludeColumnValues[fieldValue] === value) {
 				continue;
 			}
 
