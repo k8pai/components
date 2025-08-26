@@ -54,7 +54,7 @@ export const useLogger = (vars: Watchable) => {
 							.map((diff, idx) => (Object.keys(diff).length ? `→ index ${idx}: ${JSON.stringify(diff)}` : null))
 							.filter(Boolean);
 
-						if (changedRows.length) {
+						if (changedRows.length > 0) {
 							console.group(`[Logger] "${key}" changed:`);
 							changedRows.forEach((change) => console.log(change));
 							console.groupEnd();
